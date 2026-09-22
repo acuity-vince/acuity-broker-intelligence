@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Acuity's living forex broker and regulatory intelligence registry." />
+    <title>Acuity Broker Intelligence</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23123e59'/%3E%3Cpath d='M15 45h8V29h-8zm13 0h8V19h-8zm13 0h8V11h-8z' fill='%2317b6a4'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div>
+            <p class="eyebrow">Acuity Trading</p>
+            <h1>Broker Intelligence</h1>
+          </div>
+        </div>
+        <div class="status-cluster">
+          <span class="live-pill"><i></i> Living registry</span>
+          <span id="lastUpdated" class="last-updated">Loading source data…</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero-copy">
+          <div>
+            <p class="section-kicker">BROKER &amp; COMPETITOR COVERAGE</p>
+            <h2>Your market, connected.</h2>
+            <p>Explore broker brands, their regulatory footprint, and verified research-tool relationships in one evolving intelligence layer.</p>
+          </div>
+          <button id="exportButton" class="secondary-button" type="button" disabled>
+            <span>Export current view</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14"/></svg>
+          </button>
+        </section>
+
+        <section class="metrics" aria-label="Registry summary">
+          <article class="metric-card emphasis">
+            <span class="metric-label">Broker profiles</span>
+            <strong id="metricRecords">—</strong>
+            <small>Canonical brands and entities</small>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">Trading Central</span>
+            <strong id="metricTargets">—</strong>
+            <small>Documented relationships</small>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">Priority 25 gold set</span>
+            <strong id="metricVerified">—</strong>
+            <small>Every claim classified; gaps stay explicit</small>
+          </article>
+          <article class="metric-card review-card">
+            <span class="metric-label">Needs review</span>
+            <strong id="metricReview">—</strong>
+            <small>Human validation queue</small>
+          </article>
+        </section>
+
+        <section class="workspace-panel">
+          <div class="view-tabs" role="tablist" aria-label="Registry views">
+            <button class="view-tab active" data-view="trading-central" role="tab">Trading Central <span id="tradingCentralTabCount">0</span></button>
+            <button class="view-tab" data-view="verified-pilot" role="tab">Priority 25 gold <span id="verifiedPilotTabCount">0</span></button>
+            <button class="view-tab" data-view="priority" role="tab">Priority 100 <span id="priorityTabCount">0</span></button>
+            <button class="view-tab" data-view="review" role="tab">Review queue <span id="reviewTabCount">0</span></button>
+            <button class="view-tab" data-view="all" role="tab">All profiles <span id="allTabCount">0</span></button>
+          </div>
+
+          <div class="toolbar">
+            <label class="search-field">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+              <input id="searchInput" type="search" placeholder="Search broker, leader, regulator, licence, office or research tool…" autocomplete="off" />
+              <kbd>/</kbd>
+            </label>
+            <div class="filter-row">
+              <label>
+                <span>Regulator</span>
+                <select id="regulatorFilter"><option value="">All regulators</option></select>
+              </label>
+              <label>
+                <span>Confidence</span>
+                <select id="confidenceFilter">
+                  <option value="">All confidence</option>
+                  <option value="HIGH">High</option>
+                  <option value="MEDIUM">Medium</option>
+                  <option value="LOW">Low</option>
+                </select>
+              </label>
+              <label>
+                <span>Company type</span>
+                <select id="companyTypeFilter"><option value="">All company types</option></select>
+              </label>
+              <label>
+                <span>Tool status</span>
+                <select id="vendorStatusFilter">
+                  <option value="">All statuses</option>
+                  <option value="CONFIRMED_ACTIVE">Confirmed active</option>
+                  <option value="LIKELY_ACTIVE">Likely active</option>
+                  <option value="DIRECTORY_REPORTED">Directory reported</option>
+                  <option value="HISTORICAL">Historical</option>
+                  <option value="UNCLEAR">Unclear</option>
+                </select>
+              </label>
+              <button id="clearFilters" class="clear-button" type="button">Clear filters</button>
+            </div>
+          </div>
+
+          <div class="result-strip">
+            <p><strong id="visibleCount">0</strong> results</p>
+            <p id="viewDescription">Showing brokers with documented Trading Central relationships.</p>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <colgroup>
+                <col class="col-broker" />
+                <col class="col-company" />
+                <col class="col-tool" />
+                <col class="col-regulators" />
+                <col class="col-market" />
+                <col class="col-verification" />
+                <col class="col-confidence" />
+                <col class="col-evidence" />
+                <col class="col-action" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><button data-sort="brand_name">Broker <span>↕</span></button></th>
+                  <th><button data-sort="company_type">Company type <span>↕</span></button></th>
+                  <th><button data-sort="research_tools">Research tool <span>↕</span></button></th>
+                  <th><button data-sort="regulator_sort">Regulators <span>↕</span></button></th>
+                  <th><button data-sort="primary_market">Primary market <span>↕</span></button></th>
+                  <th><button data-sort="verification_status">Verification <span>↕</span></button></th>
+                  <th><button data-sort="profile_confidence">Confidence <span>↕</span></button></th>
+                  <th>Evidence</th>
+                  <th aria-label="Open details"></th>
+                </tr>
+              </thead>
+              <tbody id="registryBody">
+                <tr><td colspan="9" class="loading-cell">Loading the registry…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <p>Rows <span id="rowRange">0–0</span></p>
+            <div>
+              <button id="previousPage" type="button" aria-label="Previous page">←</button>
+              <span id="pageLabel">Page 1 of 1</span>
+              <button id="nextPage" type="button" aria-label="Next page">→</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="detailDialog" class="detail-dialog">
+      <div class="dialog-header">
+        <div>
+          <p id="detailRegulator" class="section-kicker">Broker profile</p>
+          <h3 id="detailName"></h3>
+        </div>
+        <button id="closeDialog" class="icon-button" type="button" aria-label="Close details">×</button>
+      </div>
+      <div id="detailContent" class="detail-content"></div>
+    </dialog>
+
+    <template id="emptyState">
+      <tr><td colspan="9" class="empty-cell"><strong>No matching records</strong><span>Try clearing a filter or using a broader search.</span></td></tr>
+    </template>
+
+    <script src="./data/brokers-data.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
